@@ -5,10 +5,15 @@ import {
   updateTodo,
   deleteTodo,
 } from "./api";
-import { FILTERS } from "./constants";
 import Sidebar from "./components/Sidebar";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
+
+const FILTERS = {
+  ALL: "all",
+  ACTIVE: "active",
+  DONE: "done",
+};
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -146,58 +151,49 @@ function App() {
             </div>
 
             <div className="pagination">
-              <div className="items-per-page">
-                <label>Items per page: </label>
+              <label>Items per page: </label>
 
-                <select
-                  value={itemsPerPage}
-                  onChange={handleItemsPerPageChange}
-                >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                </select>
-              </div>
+              <select
+                value={itemsPerPage}
+                onChange={handleItemsPerPageChange}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
 
-              <div className="pagination-controls">
+              <button
+                disabled={currentPage === 1}
+                onClick={() =>
+                  setCurrentPage((page) => page - 1)
+                }
+              >
+                Previous
+              </button>
+
+              {Array.from(
+                { length: totalPages },
+                (_, index) => index + 1
+              ).map((page) => (
                 <button
-                  disabled={currentPage === 1}
-                  onClick={() =>
-                    setCurrentPage((page) => page - 1)
-                  }
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
                 >
-                  Previous
+                  {page}
                 </button>
+              ))}
 
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => index + 1
-                ).map((page) => (
-                  <button
-                    key={page}
-                    className={
-                      currentPage === page
-                        ? "active"
-                        : ""
-                    }
-                    onClick={() => setCurrentPage(page)}
-                  >
-                    {page}
-                  </button>
-                ))}
-
-                <button
-                  disabled={
-                    currentPage === totalPages ||
-                    totalPages === 0
-                  }
-                  onClick={() =>
-                    setCurrentPage((page) => page + 1)
-                  }
-                >
-                  Next
-                </button>
-              </div>
+              <button
+                disabled={
+                  currentPage === totalPages ||
+                  totalPages === 0
+                }
+                onClick={() =>
+                  setCurrentPage((page) => page + 1)
+                }
+              >
+                Next
+              </button>
             </div>
           </>
         )}
