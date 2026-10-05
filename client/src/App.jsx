@@ -11,7 +11,6 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Runs an API action and shows its error in the banner if it fails
   const run = async (action) => {
     try {
       setError("");
@@ -37,8 +36,7 @@ function App() {
   const handleUpdate = (id, data) =>
     run(async () => {
       const updated = await updateTodo(id, data);
-      // TODO: Complete this. Update the `todos` state so the edited todo is
-      // replaced with `updated` (keep every other todo as it is).
+      setTodos((prev) => prev.map((t) => (t._id === id ? updated : t)));
     });
 
   const handleDelete = (id) =>
